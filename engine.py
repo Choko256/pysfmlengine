@@ -40,9 +40,22 @@ class Engine:
 		# Show initial state
 		self.running = True
 		self.states = []
+
+		self.new_state(initial_state)
+
+	def run(self):
+		while self.running:
+			for event in self.window.events:
+				if type(event) is sf.CloseEvent:
+					self.running = False
+				self.states[0].handle_event(event)
+			self.window.clear()
+			self.states[0].draw(self.window)
+			self.window.display()
+		self.window.close()
 		
 	def new_state(self, state):
-		self.states.append(state)
+		self.states.insert(0, state)
 
 	def back_state(self):
 		self.states.pop()
