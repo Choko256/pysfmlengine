@@ -64,7 +64,7 @@ class ResourceManager:
 				resdict[rname] = rescls(rpath)
 
 	def del_resource(self, rname, rtype):
-		resdict = getattr(self, rtype):
+		resdict = getattr(self, rtype)
 		if resdict:
 			if rname in resdict:
 				del resdict[rname]

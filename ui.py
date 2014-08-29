@@ -25,7 +25,7 @@ class Component(metaclass=ABCMeta):
 
 class SizedComponent(Component, metaclass=ABCMeta):
 	def __init__(self, parent, position, font, size, **kwargs):
-		Component.__init__(self, parent, position, font, **kwargs):
+		Component.__init__(self, parent, position, font, **kwargs)
 		self.size = size
 
 	def resize(self, newsize):
@@ -35,7 +35,7 @@ class SizedComponent(Component, metaclass=ABCMeta):
 
 class FocusedComponent(SizedComponent, metaclass=ABCMeta):
 	def __init__(self, parent, position, font, size, **kwargs):
-		SizedComponent.__init__(self, parent, position, font, size, **kwargs):
+		SizedComponent.__init__(self, parent, position, font, size, **kwargs)
 		self.focused = False
 
 	def focus(self):
@@ -91,7 +91,7 @@ class Label(SizedComponent):
 		window.draw(_inner)
 		self.trigger('drawn', target=window)
 
-class TextBox(SizedComponent):
+class TextBox(FocusedComponent):
 	def __init__(self, parent, position, font, size, initial='', placeholder='', **kwargs):
 		SizedComponent.__init__(self, parent, position, font, size, **kwargs)
 		self.text = initial

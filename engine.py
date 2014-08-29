@@ -3,15 +3,20 @@
 import sfml as sf
 from configparser import ConfigParser
 from resource import ResourceManager
+import builtins
 
 class DynamicParams:
-	def __init__(self, **kwargs):
-		for k in kwargs:
-			if type(kwargs[k]) == dict:
-				setattr(self, k, DynamicParams(kwargs[k]))
-			else:
-				t, v = kwargs[k].split(':')
-				setattr(self, k, getattr(globals(), t)(v))
+	def __init__(self, xict={}, **kwargs):
+		def init_attr(arr):
+			for k in arr:
+				if type(arr[k]) == dict:
+					setattr(self, k, DynamicParams(arr[k]))
+				else:
+					t, v = arr[k].split(':')
+					setattr(self, k, getattr(builtins, t)(v))
+		init_attr(kwargs)
+		init_attr(xict)
+			
 
 class EngineConfiguration:
 	def __init__(self, config_file='engine.cfg'):
@@ -30,7 +35,7 @@ class Engine:
 		self.resmgr = ResourceManager(default_resdir)
 
 		# Init window
-		if self.config.video.fullscreen:
+		if self.config.video.fullscreen == 1:
 			wstyle = sf.Style.FULLSCREEN
 		else:
 			wstyle = sf.Style.DEFAULT
@@ -40,8 +45,6 @@ class Engine:
 		# Show initial state
 		self.running = True
 		self.states = []
-
-		self.new_state(initial_state)
 
 	def run(self):
 		while self.running:
